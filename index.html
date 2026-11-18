@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#172B4D">
+<title>Discipline OS</title>
+
+<style>
+:root {
+  --navy:#172B4D;
+  --jade:#167D65;
+  --gold:#D6B66A;
+  --bg:#F3F5F7;
+  --white:#fff;
+  --red:#C94C4C;
+  --text:#243047;
+  --muted:#8993A3;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+header {
+  background:var(--navy);
+  color:white;
+  padding:25px 20px 30px;
+  border-radius:0 0 25px 25px;
+}
+.top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo {font-size:19px;font-weight:bold;}
+.logo span {color:var(--gold);}
+.date {font-size:12px;color:#dce3ee;margin-top:18px;}
+.greeting {font-size:23px;font-weight:bold;margin-top:12px;}
+.subtitle {font-size:12px;color:#c5d0df;margin-top:8px;}
+.container {padding:18px;max-width:600px;margin:auto;}
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:-5px;
+}
+.stat {
+  background:white;
+  border-radius:15px;
+  padding:15px 8px;
+  text-align:center;
+  box-shadow:0 3px 12px #172b4d0c;
+}
+.stat strong {display:block;font-size:22px;color:var(--jade);}
+.stat small {font-size:11px;color:var(--muted);}
+.section-title {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:25px 0 13px;
+  font-weight:bold;
+}
+.progress-bg {
+  height:9px;
+  background:#e2e7eb;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:12px;
+}
+.progress {
+  height:100%;
+  width:0;
+  background:var(--jade);
+  transition:.3s;
+}
+.card {
+  background:white;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:12px;
+  box-shadow:0 3px 12px #172b4d0a;
+}
+.task {
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+.task input {width:20px;height:20px;accent-color:var(--jade);}
+.task-info {flex:1;min-width:0;}
+.task-name {font-size:14px;font-weight:bold;overflow-wrap:anywhere;}
+.task-time {font-size:11px;color:var(--muted);margin-top:5px;}
+.done .task-name {text-decoration:line-through;color:var(--muted);}
+.delete {
+  border:0;background:#fff0f0;color:var(--red);
+  border-radius:8px;padding:8px;cursor:pointer;
+}
+.add-form input, .add-form select {
+  width:100%;
+  border:1px solid #e0e5e9;
+  border-radius:11px;
+  padding:13px;
+  font-family:inherit;
+  margin-bottom:10px;
+  background:white;
+}
+button.primary {
+  width:100%;border:0;border-radius:11px;
+  background:var(--jade);color:white;
+  padding:14px;font-family:inherit;
+  font-size:14px;font-weight:bold;cursor:pointer;
+}
+button.secondary {
+  border:1px solid #dce3e8;
+  background:white;color:var(--navy);
+  padding:12px;border-radius:10px;
+  font-family:inherit;cursor:pointer;
+}
+.empty {text-align:center;color:var(--muted);padding:25px;font-size:13px;}
+.notice {font-size:12px;color:var(--muted);line-height:2;}
+.penalty {border-right:4px solid var(--gold);}
+footer {text-align:center;color:var(--muted);font-size:10px;padding:25px;}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="top">
+    <div class="logo">DISCIPLINE <span>OS.</span></div>
+    <div>◈</div>
+  </div>
+  <div class="date" id="today"></div>
+  <div class="greeting">امروز رو بساز.</div>
+  <div class="subtitle">انضباط، نتیجه تصمیم‌های کوچک روزانه است.</div>
+</header>
+
+<main class="container">
+
+  <div class="stats">
+    <div class="stat">
+      <strong id="total">۰</strong>
+      <small>کل وظایف</small>
+    </div>
+    <div class="stat">
+      <strong id="completed">۰</strong>
+      <small>انجام‌شده</small>
+    </div>
+    <div class="stat">
+      <strong id="percent">۰٪</strong>
+      <small>پیشرفت امروز</small>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <span>پیشرفت روزانه</span>
+    <span id="progressText">۰٪</span>
+  </div>
+  <div class="progress-bg">
+    <div class="progress" id="progressBar"></div>
+  </div>
+
+  <div class="section-title">
+    <span>برنامه امروز</span>
+    <span id="taskCount" style="color:var(--muted);font-size:12px"></span>
+  </div>
+
+  <div id="taskList"></div>
+
+  <div class="section-title">+ افزودن وظیفه جدید</div>
+
+  <div class="card add-form">
+    <input id="taskInput" placeholder="مثلاً مطالعه زبان انگلیسی">
+    <input id="taskTime" type="time">
+    <select id="taskCategory">
+      <option value="شخصی">شخصی</option>
+      <option value="دانشگاه">دانشگاه</option>
+      <option value="ورزش">ورزش</option>
+      <option value="کار">کار</option>
+      <option value="یادگیری">یادگیری</option>
+    </select>
+    <button class="primary" onclick="addTask()">افزودن به برنامه</button>
+  </div>
+
+  <div class="section-title">انضباط و مسئولیت‌پذیری</div>
+  <div class="card penalty">
+    <strong>قانون امروز</strong>
+    <p class="notice">
+      اگر وظیفه‌ای را انجام ندادی، ابتدا دلیلش را بررسی کن.
+      پیشنهاد جبران می‌تواند شامل ۱۰ دقیقه مرتب‌سازی محیط،
+      مرور برنامه یا تکمیل یک کار عقب‌افتاده باشد.
+      هیچ جریمه‌ای نباید به سلامتی، خواب یا تغذیه آسیب بزند.
+    </p>
+    <div id="penaltyText" class="notice"></div>
+  </div>
+
+  <div class="section-title">پشتیبان‌گیری اطلاعات</div>
+  <div class="card">
+    <p class="notice">
+      اطلاعات این نسخه در حافظه مرورگر همین گوشی ذخیره می‌شوند.
+      برای جلوگیری از ازدست‌رفتن برنامه، نسخه پشتیبان بگیر.
+    </p>
+    <button class="secondary" onclick="backup()">دریافت فایل پشتیبان</button>
+  </div>
+
+  <footer>DISCIPLINE OS · BUILD YOURSELF EVERY DAY</footer>
+</main>
+
+<script>
+const KEY = "discipline_os_v01";
+
+function localDate() {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+    String(d.getMonth()+1).padStart(2,"0") + "-" +
+    String(d.getDate()).padStart(2,"0");
+}
+
+let tasks = [];
+try {
+  tasks = JSON.parse(localStorage.getItem(KEY) || "[]");
+  if (!Array.isArray(tasks)) tasks = [];
+} catch(e) {
+  tasks = [];
+}
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(tasks));
+  render();
+}
+
+function addTask() {
+  const input = document.getElementById("taskInput");
+  const name = input.value.trim();
+  const time = document.getElementById("taskTime").value;
+  const category = document.getElementById("taskCategory").value;
+
+  if (!name) {
+    alert("لطفاً نام وظیفه را وارد کن.");
+    return;
+  }
+
+  tasks.push({
+    id: Date.now() + Math.random(),
+    name,
+    time,
+    category,
+    date: localDate(),
+    done: false
+  });
+
+  input.value = "";
+  document.getElementById("taskTime").value = "";
+  save();
+}
+
+function toggleTask(id) {
+  tasks = tasks.map(t =>
+    t.id === id ? {...t, done:!t.done} : t
+  );
+  save();
+}
+
+function deleteTask(id) {
+  if (!confirm("این وظیفه حذف شود؟")) return;
+  tasks = tasks.filter(t => t.id !== id);
+  save();
+}
+
+function render() {
+  const todayTasks = tasks.filter(t => t.date === localDate());
+  const done = todayTasks.filter(t => t.done).length;
+  const total = todayTasks.length;
+  const percent = total ? Math.round(done / total * 100) : 0;
+
+  document.getElementById("total").textContent = total;
+  document.getElementById("completed").textContent = done;
+  document.getElementById("percent").textContent = percent + "%";
+  document.getElementById("progressText").textContent = percent + "%";
+  document.getElementById("progressBar").style.width = percent + "%";
+  document.getElementById("taskCount").textContent = total + " وظیفه";
+
+  const list = document.getElementById("taskList");
+
+  if (!total) {
+    list.innerHTML = '<div class="card empty">هنوز برنامه‌ای برای امروز نساختی.<br>اولین وظیفه‌ات را اضافه کن.</div>';
+  } else {
+    list.innerHTML = todayTasks
+      .sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
+      .map(t => `
+        <div class="card">
+          <div class="task ${t.done ? "done" : ""}">
+            <input type="checkbox" ${t.done ? "checked" : ""}
+              onchange="toggleTask(${Number(t.id)})">
+            <div class="task-info">
+              <div class="task-name">${escapeHTML(t.name)}</div>
+              <div class="task-time">
+                ${escapeHTML(t.category)} · ${t.time || "بدون زمان"}
+              </div>
+            </div>
+            <button class="delete" onclick="deleteTask(${Number(t.id)})">حذف</button>
+          </div>
+        </div>
+      `).join("");
+  }
+
+  document.getElementById("penaltyText").textContent =
+    total > 0 && done < total
+      ? "هنوز " + (total-done) + " وظیفه باقی مانده است. برای هرکدام یک زمان واقع‌بینانه جهت جبران تعیین کن."
+      : total > 0
+      ? "آفرین! تمام وظایف امروز را انجام دادی."
+      : "با برنامه‌ریزی شروع کن؛ نه با فشار آوردن به خودت.";
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+function backup() {
+  const blob = new Blob(
+    [JSON.stringify(tasks, null, 2)],
+    {type:"application/json"}
+  );
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "discipline-os-backup.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+const now = new Date();
+document.getElementById("today").textContent =
+  new Intl.DateTimeFormat("fa-IR", {
+    weekday:"long", year:"numeric",
+    month:"long", day:"numeric"
+  }).format(now);
+
+render();
+</script>
+
+</body>
+  </html>
+  
