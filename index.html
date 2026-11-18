@@ -1,350 +1,102 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#172B4D">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172B4D"><meta name="description" content="Discipline OS - personal planner">
+<link rel="manifest" href="./manifest.webmanifest">
 <title>Discipline OS</title>
-
 <style>
-:root {
-  --navy:#172B4D;
-  --jade:#167D65;
-  --gold:#D6B66A;
-  --bg:#F3F5F7;
-  --white:#fff;
-  --red:#C94C4C;
-  --text:#243047;
-  --muted:#8993A3;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  font-family:Tahoma,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-header {
-  background:var(--navy);
-  color:white;
-  padding:25px 20px 30px;
-  border-radius:0 0 25px 25px;
-}
-.top {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.logo {font-size:19px;font-weight:bold;}
-.logo span {color:var(--gold);}
-.date {font-size:12px;color:#dce3ee;margin-top:18px;}
-.greeting {font-size:23px;font-weight:bold;margin-top:12px;}
-.subtitle {font-size:12px;color:#c5d0df;margin-top:8px;}
-.container {padding:18px;max-width:600px;margin:auto;}
-.stats {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:-5px;
-}
-.stat {
-  background:white;
-  border-radius:15px;
-  padding:15px 8px;
-  text-align:center;
-  box-shadow:0 3px 12px #172b4d0c;
-}
-.stat strong {display:block;font-size:22px;color:var(--jade);}
-.stat small {font-size:11px;color:var(--muted);}
-.section-title {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin:25px 0 13px;
-  font-weight:bold;
-}
-.progress-bg {
-  height:9px;
-  background:#e2e7eb;
-  border-radius:20px;
-  overflow:hidden;
-  margin-top:12px;
-}
-.progress {
-  height:100%;
-  width:0;
-  background:var(--jade);
-  transition:.3s;
-}
-.card {
-  background:white;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:12px;
-  box-shadow:0 3px 12px #172b4d0a;
-}
-.task {
-  display:flex;
-  align-items:center;
-  gap:11px;
-}
-.task input {width:20px;height:20px;accent-color:var(--jade);}
-.task-info {flex:1;min-width:0;}
-.task-name {font-size:14px;font-weight:bold;overflow-wrap:anywhere;}
-.task-time {font-size:11px;color:var(--muted);margin-top:5px;}
-.done .task-name {text-decoration:line-through;color:var(--muted);}
-.delete {
-  border:0;background:#fff0f0;color:var(--red);
-  border-radius:8px;padding:8px;cursor:pointer;
-}
-.add-form input, .add-form select {
-  width:100%;
-  border:1px solid #e0e5e9;
-  border-radius:11px;
-  padding:13px;
-  font-family:inherit;
-  margin-bottom:10px;
-  background:white;
-}
-button.primary {
-  width:100%;border:0;border-radius:11px;
-  background:var(--jade);color:white;
-  padding:14px;font-family:inherit;
-  font-size:14px;font-weight:bold;cursor:pointer;
-}
-button.secondary {
-  border:1px solid #dce3e8;
-  background:white;color:var(--navy);
-  padding:12px;border-radius:10px;
-  font-family:inherit;cursor:pointer;
-}
-.empty {text-align:center;color:var(--muted);padding:25px;font-size:13px;}
-.notice {font-size:12px;color:var(--muted);line-height:2;}
-.penalty {border-right:4px solid var(--gold);}
-footer {text-align:center;color:var(--muted);font-size:10px;padding:25px;}
-</style>
-</head>
-
+:root{--navy:#172B4D;--jade:#167D65;--gold:#D6B66A;--bg:#F3F5F7;--white:#fff;--red:#C94C4C;--ink:#263449;--muted:#8290a2;--line:#e7ebef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+header{background:var(--navy);color:#fff;padding:20px 17px 22px;border-radius:0 0 24px 24px}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;letter-spacing:.5px}.brand b{color:var(--gold)}.mutedlight{color:#cbd5e1;font-size:12px}
+h1{font-size:23px;margin:18px 0 6px}main{max-width:760px;margin:auto;padding:15px 14px 90px}
+nav{display:flex;gap:7px;overflow:auto;padding:10px 0 14px;position:sticky;top:0;background:var(--bg);z-index:4}
+nav button,.chip{border:1px solid var(--line);background:#fff;border-radius:22px;padding:9px 13px;white-space:nowrap;color:var(--ink);font-size:12px}
+nav button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat,.card{background:#fff;border-radius:16px;padding:14px;box-shadow:0 3px 14px #172b4d0a;margin-bottom:11px}
+.stat strong{display:block;color:var(--jade);font-size:21px}.stat small,.small{font-size:11px;color:var(--muted)}
+h2{font-size:16px;margin:20px 2px 11px}.row{display:flex;align-items:center;gap:8px}.between{justify-content:space-between}.grow{flex:1;min-width:0}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);margin:4px 0 9px}
+textarea{min-height:75px;resize:vertical}.btn{border:0;border-radius:11px;background:var(--jade);color:#fff;padding:12px 14px;font-weight:bold}.btn.secondary{background:#edf3f1;color:var(--jade);border:1px solid #d6e8e2}.btn.dark{background:var(--navy)}.btn.danger{background:#fff0f0;color:var(--red)}.btn.gold{background:#f7f0dd;color:#785e20}.btn.tiny{padding:7px 9px;font-size:11px}
+.task{display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--line);padding:12px 0}.task:last-child{border:0}.task input[type=checkbox]{width:20px;height:20px;accent-color:var(--jade);margin:2px 0}.taskname{font-size:14px;font-weight:bold}.task.done .taskname{text-decoration:line-through;color:var(--muted)}.tag{display:inline-block;background:#eef3f5;color:#607084;padding:4px 7px;border-radius:7px;font-size:10px;margin:4px 3px 0 0}
+.progress{height:9px;background:#e7ecef;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:var(--jade)}
+.hidden{display:none!important}.notice{background:#f8f5e9;border-right:4px solid var(--gold);padding:11px;border-radius:10px;font-size:12px;line-height:1.9}
+.day{font-weight:bold;color:var(--navy);margin:12px 0 6px}.empty{text-align:center;color:var(--muted);padding:24px;font-size:13px}
+label{font-size:12px;color:#64748b;display:block;margin-top:4px}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{flex:1}
+.evidence{font-size:11px;color:var(--jade);overflow-wrap:anywhere}.dangertext{color:var(--red)}.footer{text-align:center;color:var(--muted);font-size:10px;padding:20px}
+@media(min-width:650px){main{padding-left:22px;padding-right:22px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid{gap:12px}}
+</style></head>
 <body>
-
-<header>
-  <div class="top">
-    <div class="logo">DISCIPLINE <span>OS.</span></div>
-    <div>◈</div>
-  </div>
-  <div class="date" id="today"></div>
-  <div class="greeting">امروز رو بساز.</div>
-  <div class="subtitle">انضباط، نتیجه تصمیم‌های کوچک روزانه است.</div>
-</header>
-
-<main class="container">
-
-  <div class="stats">
-    <div class="stat">
-      <strong id="total">۰</strong>
-      <small>کل وظایف</small>
-    </div>
-    <div class="stat">
-      <strong id="completed">۰</strong>
-      <small>انجام‌شده</small>
-    </div>
-    <div class="stat">
-      <strong id="percent">۰٪</strong>
-      <small>پیشرفت امروز</small>
-    </div>
-  </div>
-
-  <div class="section-title">
-    <span>پیشرفت روزانه</span>
-    <span id="progressText">۰٪</span>
-  </div>
-  <div class="progress-bg">
-    <div class="progress" id="progressBar"></div>
-  </div>
-
-  <div class="section-title">
-    <span>برنامه امروز</span>
-    <span id="taskCount" style="color:var(--muted);font-size:12px"></span>
-  </div>
-
-  <div id="taskList"></div>
-
-  <div class="section-title">+ افزودن وظیفه جدید</div>
-
-  <div class="card add-form">
-    <input id="taskInput" placeholder="مثلاً مطالعه زبان انگلیسی">
-    <input id="taskTime" type="time">
-    <select id="taskCategory">
-      <option value="شخصی">شخصی</option>
-      <option value="دانشگاه">دانشگاه</option>
-      <option value="ورزش">ورزش</option>
-      <option value="کار">کار</option>
-      <option value="یادگیری">یادگیری</option>
-    </select>
-    <button class="primary" onclick="addTask()">افزودن به برنامه</button>
-  </div>
-
-  <div class="section-title">انضباط و مسئولیت‌پذیری</div>
-  <div class="card penalty">
-    <strong>قانون امروز</strong>
-    <p class="notice">
-      اگر وظیفه‌ای را انجام ندادی، ابتدا دلیلش را بررسی کن.
-      پیشنهاد جبران می‌تواند شامل ۱۰ دقیقه مرتب‌سازی محیط،
-      مرور برنامه یا تکمیل یک کار عقب‌افتاده باشد.
-      هیچ جریمه‌ای نباید به سلامتی، خواب یا تغذیه آسیب بزند.
-    </p>
-    <div id="penaltyText" class="notice"></div>
-  </div>
-
-  <div class="section-title">پشتیبان‌گیری اطلاعات</div>
-  <div class="card">
-    <p class="notice">
-      اطلاعات این نسخه در حافظه مرورگر همین گوشی ذخیره می‌شوند.
-      برای جلوگیری از ازدست‌رفتن برنامه، نسخه پشتیبان بگیر.
-    </p>
-    <button class="secondary" onclick="backup()">دریافت فایل پشتیبان</button>
-  </div>
-
-  <footer>DISCIPLINE OS · BUILD YOURSELF EVERY DAY</footer>
+<header><div class="top"><div class="brand">DISCIPLINE <b>OS.</b></div><div class="mutedlight" id="todayLabel"></div></div><h1>امروز رو بساز.</h1><div class="mutedlight">برنامه‌ریزی، پیگیری و مسئولیت‌پذیری در یک جا</div></header>
+<main>
+<nav id="tabs">
+<button class="active" data-tab="today">امروز</button><button data-tab="week">برنامه هفتگی</button><button data-tab="add">وظیفه جدید</button><button data-tab="reports">گزارش‌ها</button><button data-tab="import">ورود برنامه</button><button data-tab="settings">تنظیمات و پشتیبان</button>
+</nav>
+<section id="today" class="view">
+<div class="grid"><div class="stat"><strong id="sTotal">۰</strong><small>وظایف امروز</small></div><div class="stat"><strong id="sDone">۰</strong><small>انجام‌شده</small></div><div class="stat"><strong id="sPct">۰٪</strong><small>پیشرفت</small></div></div>
+<div class="card"><div class="row between"><b>پیشرفت روزانه</b><span class="small" id="pctLabel">۰٪</span></div><div class="progress" style="margin-top:10px"><i id="progressBar" style="width:0%"></i></div></div>
+<h2>وظایف امروز</h2><div class="card" id="todayTasks"></div>
+<h2>یادآوری‌ها و جبران</h2><div id="nudges"></div>
+</section>
+<section id="week" class="view hidden"><div class="row between"><h2>برنامه هفتگی</h2><button class="btn tiny secondary" id="prevWeek">هفته قبل</button><button class="btn tiny secondary" id="nextWeek">هفته بعد</button></div><div class="small" id="weekRange"></div><div id="weekList"></div></section>
+<section id="add" class="view hidden"><h2>افزودن وظیفه</h2><div class="card">
+<label>عنوان وظیفه</label><input id="fTitle" placeholder="مثلاً مطالعه زبان انگلیسی">
+<div class="formgrid"><div><label>تاریخ</label><input id="fDate" type="date"></div><div><label>دسته‌بندی</label><select id="fCat"><option>شخصی</option><option>دانشگاه</option><option>ورزش</option><option>کار</option><option>یادگیری</option><option>سلامت</option><option>سایر</option></select></div>
+<div><label>ساعت شروع</label><input id="fStart" type="time"></div><div><label>ساعت پایان</label><input id="fEnd" type="time"></div><div><label>مهلت انجام (اختیاری)</label><input id="fDeadline" type="datetime-local"></div><div><label>تکرار</label><select id="fRepeat"><option value="none">بدون تکرار</option><option value="weekly">هر هفته در همین روز</option></select></div></div>
+<label>توضیحات</label><textarea id="fNotes" placeholder="جزئیات یا هدف انجام کار"></textarea><button class="btn" style="width:100%" id="saveTask">ذخیره وظیفه</button></div></section>
+<section id="reports" class="view hidden"><h2>گزارش عملکرد</h2><div class="grid"><div class="stat"><strong id="rWeek">۰٪</strong><small>این هفته</small></div><div class="stat"><strong id="rMonth">۰٪</strong><small>این ماه</small></div><div class="stat"><strong id="rAll">۰٪</strong><small>کل وظایف</small></div></div><div class="card" id="reportDetails"></div></section>
+<section id="import" class="view hidden"><h2>ورود برنامه از PDF یا Excel</h2><div class="card"><p class="small" style="line-height:2">فایل فقط در همین مرورگر پردازش می‌شود. برای Excel از ستون‌های «عنوان»، «تاریخ»، «ساعت شروع»، «ساعت پایان»، «دسته‌بندی» استفاده کن. استخراج PDF ممکن است به کیفیت و ساختار فایل بستگی داشته باشد؛ قبل از ذخیره، ردیف‌ها را بررسی کن.</p><label>انتخاب فایل PDF یا Excel</label><input id="importFile" type="file" accept=".pdf,.xlsx,.xls,.csv"><div id="importStatus" class="small"></div><div id="previewRows"></div><button class="btn" id="commitImport" disabled style="width:100%;margin-top:10px">افزودن ردیف‌های انتخاب‌شده</button></div><div class="notice">استخراج خودکار با قواعد متنی انجام می‌شود و در این نسخه از هوش مصنوعی ابری استفاده نمی‌شود؛ بنابراین هیچ فایلی به سرور ارسال نمی‌شود.</div></section>
+<section id="settings" class="view hidden"><h2>تنظیمات، شواهد و پشتیبان</h2><div class="card"><b>اعلان‌ها</b><p class="small">برای یادآوری هنگام باز بودن برنامه، اجازه اعلان بده. اعلان‌های مرورگر ممکن است با بسته بودن برنامه یا محدودیت‌های اندروید همیشه اجرا نشوند.</p><button class="btn secondary" id="notifyBtn">فعال‌سازی اعلان‌ها</button><div id="notifyStatus" class="small"></div></div>
+<div class="card"><b>پشتیبان‌گیری</b><p class="small">فایل پشتیبان شامل وظایف و تنظیمات است. شواهد رسانه‌ای جداگانه ذخیره می‌شوند و برای کاهش حجم، در این فایل قرار نمی‌گیرند.</p><div class="actions"><button class="btn" id="exportBtn">خروجی پشتیبان</button><button class="btn secondary" id="restoreBtn">بازیابی پشتیبان</button></div><input type="file" id="restoreFile" accept=".json" class="hidden"></div>
+<div class="card"><b>حریم خصوصی و ذخیره‌سازی</b><p class="small">اطلاعات برنامه و شواهد در حافظه محلی مرورگر همین گوشی ذخیره می‌شوند؛ پاک‌کردن داده‌های مرورگر یا حذف برنامه ممکن است آن‌ها را از بین ببرد. مخزن GitHub فقط کد برنامه را نگه می‌دارد، نه وظایف شخصی را.</p><button class="btn danger" id="clearBtn">پاک‌کردن همه اطلاعات محلی</button></div></section>
+<div class="footer">DISCIPLINE OS · LOCAL-FIRST · V0.2</div>
 </main>
-
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-const KEY = "discipline_os_v01";
-
-function localDate() {
-  const d = new Date();
-  return d.getFullYear() + "-" +
-    String(d.getMonth()+1).padStart(2,"0") + "-" +
-    String(d.getDate()).padStart(2,"0");
-}
-
-let tasks = [];
-try {
-  tasks = JSON.parse(localStorage.getItem(KEY) || "[]");
-  if (!Array.isArray(tasks)) tasks = [];
-} catch(e) {
-  tasks = [];
-}
-
-function save() {
-  localStorage.setItem(KEY, JSON.stringify(tasks));
-  render();
-}
-
-function addTask() {
-  const input = document.getElementById("taskInput");
-  const name = input.value.trim();
-  const time = document.getElementById("taskTime").value;
-  const category = document.getElementById("taskCategory").value;
-
-  if (!name) {
-    alert("لطفاً نام وظیفه را وارد کن.");
-    return;
-  }
-
-  tasks.push({
-    id: Date.now() + Math.random(),
-    name,
-    time,
-    category,
-    date: localDate(),
-    done: false
-  });
-
-  input.value = "";
-  document.getElementById("taskTime").value = "";
-  save();
-}
-
-function toggleTask(id) {
-  tasks = tasks.map(t =>
-    t.id === id ? {...t, done:!t.done} : t
-  );
-  save();
-}
-
-function deleteTask(id) {
-  if (!confirm("این وظیفه حذف شود؟")) return;
-  tasks = tasks.filter(t => t.id !== id);
-  save();
-}
-
-function render() {
-  const todayTasks = tasks.filter(t => t.date === localDate());
-  const done = todayTasks.filter(t => t.done).length;
-  const total = todayTasks.length;
-  const percent = total ? Math.round(done / total * 100) : 0;
-
-  document.getElementById("total").textContent = total;
-  document.getElementById("completed").textContent = done;
-  document.getElementById("percent").textContent = percent + "%";
-  document.getElementById("progressText").textContent = percent + "%";
-  document.getElementById("progressBar").style.width = percent + "%";
-  document.getElementById("taskCount").textContent = total + " وظیفه";
-
-  const list = document.getElementById("taskList");
-
-  if (!total) {
-    list.innerHTML = '<div class="card empty">هنوز برنامه‌ای برای امروز نساختی.<br>اولین وظیفه‌ات را اضافه کن.</div>';
-  } else {
-    list.innerHTML = todayTasks
-      .sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
-      .map(t => `
-        <div class="card">
-          <div class="task ${t.done ? "done" : ""}">
-            <input type="checkbox" ${t.done ? "checked" : ""}
-              onchange="toggleTask(${Number(t.id)})">
-            <div class="task-info">
-              <div class="task-name">${escapeHTML(t.name)}</div>
-              <div class="task-time">
-                ${escapeHTML(t.category)} · ${t.time || "بدون زمان"}
-              </div>
-            </div>
-            <button class="delete" onclick="deleteTask(${Number(t.id)})">حذف</button>
-          </div>
-        </div>
-      `).join("");
-  }
-
-  document.getElementById("penaltyText").textContent =
-    total > 0 && done < total
-      ? "هنوز " + (total-done) + " وظیفه باقی مانده است. برای هرکدام یک زمان واقع‌بینانه جهت جبران تعیین کن."
-      : total > 0
-      ? "آفرین! تمام وظایف امروز را انجام دادی."
-      : "با برنامه‌ریزی شروع کن؛ نه با فشار آوردن به خودت.";
-}
-
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, c => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;",
-    '"':"&quot;", "'":"&#39;"
-  })[c]);
-}
-
-function backup() {
-  const blob = new Blob(
-    [JSON.stringify(tasks, null, 2)],
-    {type:"application/json"}
-  );
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "discipline-os-backup.json";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-const now = new Date();
-document.getElementById("today").textContent =
-  new Intl.DateTimeFormat("fa-IR", {
-    weekday:"long", year:"numeric",
-    month:"long", day:"numeric"
-  }).format(now);
-
-render();
-</script>
-
-</body>
-  </html>
-  
+const DB='discipline-os-v02', STORE='tasks', EVID='evidence';
+let db, tasks=[], weekOffset=0, imported=[];
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today=()=>iso(new Date());
+const fa=n=>Number(n||0).toLocaleString('fa-IR');
+function parseDate(s){return new Date(s+'T12:00:00')}
+function openDB(){return new Promise((resolve,reject)=>{const r=indexedDB.open(DB,1);r.onupgradeneeded=()=>{let d=r.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:'id'});if(!d.objectStoreNames.contains(EVID))d.createObjectStore(EVID,{keyPath:'id'});};r.onsuccess=()=>{db=r.result;resolve()};r.onerror=()=>reject(r.error)})}
+function tx(store,mode='readonly'){return db.transaction(store,mode).objectStore(store)}
+function all(store){return new Promise((res,rej)=>{let r=tx(store).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function put(store,obj){return new Promise((res,rej)=>{let r=tx(store,'readwrite').put(obj);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
+function del(store,id){return new Promise((res,rej)=>{let r=tx(store,'readwrite').delete(id);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
+async function refresh(){tasks=await all(STORE);render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function taskCard(t){let overdue=!t.done&&((t.deadline&&new Date(t.deadline)<new Date())||(t.date<today()));return `<div class="task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} data-check="${esc(t.id)}"><div class="grow"><div class="taskname">${esc(t.title)}</div><div class="small">${esc(t.category||'سایر')} · ${esc(t.start||'بدون ساعت')}${t.end?' تا '+esc(t.end):''}${t.deadline?' · مهلت '+esc(t.deadline.replace('T',' ')):''}</div>${t.notes?`<div class="small">${esc(t.notes)}</div>`:''}${t.repeat==='weekly'?'<span class="tag">تکرارشونده هفتگی</span>':''}${overdue?'<span class="tag dangertext">عقب‌افتاده</span>':''}<div class="evidence" id="ev-${esc(t.id)}"></div><button class="btn tiny secondary" data-evidence="${esc(t.id)}">افزودن مدرک عکس/ویدئو/PDF</button></div><button class="btn tiny danger" data-delete="${esc(t.id)}">حذف</button></div>`}
+async function render(){let ts=tasks.filter(t=>t.date===today()),done=ts.filter(t=>t.done).length,p=ts.length?Math.round(done/ts.length*100):0;$('sTotal').textContent=fa(ts.length);$('sDone').textContent=fa(done);$('sPct').textContent=fa(p)+'٪';$('pctLabel').textContent=fa(p)+'٪';$('progressBar').style.width=p+'%';$('todayTasks').innerHTML=ts.length?ts.sort(sorter).map(taskCard).join(''):'<div class="empty">هنوز وظیفه‌ای برای امروز ثبت نشده است.</div>';
+let late=tasks.filter(t=>!t.done&&t.date<today());$('nudges').innerHTML=late.length?late.map(t=>`<div class="card"><b>${esc(t.title)}</b><p class="small">این وظیفه از تاریخ ${esc(t.date)} باقی مانده. یک زمان جبرانی واقع‌بینانه تعیین کن.</p><div class="notice">${penalty(t)}</div></div>`).join(''):'<div class="card small">فعلاً وظیفه عقب‌افتاده‌ای نداری. عالیه!</div>';
+renderWeek();renderReports();await renderEvidenceNames()}
+function sorter(a,b){return (a.start||'99:99').localeCompare(b.start||'99:99')}
+function penalty(t){let cat=t.category||'';if(cat==='ورزش')return 'جبران پیشنهادی: ۱۰ دقیقه آماده‌سازی یا پیاده‌روی سبک، فقط اگر از نظر جسمی مناسب است.';if(cat==='دانشگاه'||cat==='یادگیری')return 'جبران پیشنهادی: یک بازه ۱۵ دقیقه‌ای مرور یا مطالعه متمرکز.';if(cat==='کار')return 'جبران پیشنهادی: ۱۰ دقیقه تعیین اولویت و انجام کوچک‌ترین گام بعدی.';return 'جبران پیشنهادی: ۱۰ دقیقه مرتب‌سازی یا انجام یک بخش کوچک از کار.'}
+function weekStart(off=0){let d=new Date();d.setHours(0,0,0,0);let day=(d.getDay()+6)%7;d.setDate(d.getDate()-day+off*7);return d}
+function renderWeek(){let s=weekStart(weekOffset),e=new Date(s);e.setDate(e.getDate()+6);$('weekRange').textContent=iso(s)+' — '+iso(e);let out='';for(let i=0;i<7;i++){let d=new Date(s);d.setDate(s.getDate()+i);let key=iso(d),list=tasks.filter(t=>t.date===key).sort(sorter);out+=`<div class="day">${d.toLocaleDateString('fa-IR',{weekday:'long',month:'short',day:'numeric'})}</div><div class="card">${list.length?list.map(taskCard).join(''):'<div class="small">وظیفه‌ای ثبت نشده</div>'}</div>`}$('weekList').innerHTML=out}
+function pct(list){return list.length?Math.round(list.filter(t=>t.done).length/list.length*100):0}
+function renderReports(){let now=new Date(),ws=weekStart(0),month=iso(new Date(now.getFullYear(),now.getMonth(),1));let w=tasks.filter(t=>t.date>=iso(ws)&&t.date<=today()),m=tasks.filter(t=>t.date>=month&&t.date<=today());$('rWeek').textContent=fa(pct(w))+'٪';$('rMonth').textContent=fa(pct(m))+'٪';$('rAll').textContent=fa(pct(tasks))+'٪';$('reportDetails').innerHTML=`<b>خلاصه عملکرد</b><p class="small">این هفته: ${fa(w.filter(t=>t.done).length)} از ${fa(w.length)} وظیفه انجام شده.</p><p class="small">این ماه: ${fa(m.filter(t=>t.done).length)} از ${fa(m.length)} وظیفه انجام شده.</p><p class="small">کل: ${fa(tasks.filter(t=>t.done).length)} از ${fa(tasks.length)} وظیفه انجام شده.</p>`}
+async function renderEvidenceNames(){let ev=await all(EVID);document.querySelectorAll('[id^="ev-"]').forEach(el=>{let id=el.id.slice(3),items=ev.filter(x=>String(x.taskId)===id);el.textContent=items.length?'مدرک ثبت‌شده: '+items.map(x=>x.name).join('، '):''})}
+$('tabs').addEventListener('click',e=>{let b=e.target.closest('button[data-tab]');if(!b)return;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.view').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.tab));});
+$('saveTask').onclick=async()=>{let title=$('fTitle').value.trim(),date=$('fDate').value;if(!title||!date){alert('عنوان و تاریخ را وارد کن.');return}let t={id:crypto.randomUUID(),title,date,category:$('fCat').value,start:$('fStart').value,end:$('fEnd').value,deadline:$('fDeadline').value,repeat:$('fRepeat').value,notes:$('fNotes').value,done:false,created:Date.now()};await put(STORE,t);if(t.repeat==='weekly'){for(let i=1;i<=12;i++){let d=parseDate(date);d.setDate(d.getDate()+7*i);await put(STORE,{...t,id:crypto.randomUUID(),date:iso(d),done:false,series:t.id})}}$('fTitle').value='';$('fNotes').value='';await refresh();document.querySelector('[data-tab="today"]').click();};
+document.addEventListener('change',async e=>{if(e.target.dataset.check){let t=tasks.find(x=>x.id===e.target.dataset.check);if(t){t.done=e.target.checked;t.completedAt=t.done?Date.now():null;await put(STORE,t);await refresh();}}});
+document.addEventListener('click',async e=>{let d=e.target.closest('[data-delete]');if(d&&confirm('این وظیفه حذف شود؟')){await del(STORE,d.dataset.delete);await refresh()}let ev=e.target.closest('[data-evidence]');if(ev){let inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*,.pdf,application/pdf';inp.onchange=async()=>{let f=inp.files[0];if(!f)return;if(f.size>25*1024*1024){alert('حجم فایل باید کمتر از ۲۵ مگابایت باشد.');return}await put(EVID,{id:crypto.randomUUID(),taskId:ev.dataset.evidence,name:f.name,type:f.type,blob:f,created:Date.now()});await renderEvidenceNames();alert('مدرک روی همین گوشی ذخیره شد.')};inp.click()}});
+$('prevWeek').onclick=()=>{weekOffset--;renderWeek()};$('nextWeek').onclick=()=>{weekOffset++;renderWeek()};
+$('todayLabel').textContent=new Date().toLocaleDateString('fa-IR',{weekday:'long',month:'long',day:'numeric'});
+$('fDate').value=today();
+$('notifyBtn').onclick=async()=>{if(!('Notification'in window)){$('notifyStatus').textContent='این مرورگر اعلان را پشتیبانی نمی‌کند.';return}let p=await Notification.requestPermission();$('notifyStatus').textContent=p==='granted'?'اجازه اعلان داده شد. یادآورها هنگام فعال بودن برنامه بررسی می‌شوند.':'اجازه اعلان داده نشد.';if(p==='granted')new Notification('Discipline OS',{body:'یادآوری‌ها فعال شدند.'})};
+function exportJSON(){let payload={version:'0.2',exportedAt:new Date().toISOString(),tasks};let blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download='discipline-os-backup.json';a.click();URL.revokeObjectURL(u)}
+$('exportBtn').onclick=exportJSON;$('restoreBtn').onclick=()=>$('restoreFile').click();
+$('restoreFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let data=JSON.parse(await f.text());if(!Array.isArray(data.tasks))throw Error();for(let t of data.tasks)await put(STORE,t);await refresh();alert('بازیابی انجام شد.')}catch(_){alert('فایل پشتیبان معتبر نیست.')}};
+$('clearBtn').onclick=async()=>{if(!confirm('همه وظایف و مدارک محلی حذف شوند؟ این کار برگشت‌پذیر نیست.'))return;for(let t of tasks)await del(STORE,t.id);for(let x of await all(EVID))await del(EVID,x.id);await refresh()};
+$('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;imported=[];$('previewRows').innerHTML='';$('commitImport').disabled=true;$('importStatus').textContent='در حال خواندن فایل…';try{let ext=f.name.split('.').pop().toLowerCase();if(['xlsx','xls','csv'].includes(ext)){if(!window.XLSX)throw Error('کتابخانه Excel بارگذاری نشد؛ اتصال اینترنت را بررسی کن.');let wb=XLSX.read(await f.arrayBuffer(),{type:'array'}),rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});imported=rows.map(r=>({title:r['عنوان']||r['وظیفه']||r['Task']||r['task']||r['نام'],date:normalizeDate(r['تاریخ']||r['Date']||r['date'])||today(),start:r['ساعت شروع']||r['شروع']||r['Start']||'',end:r['ساعت پایان']||r['پایان']||r['End']||'',category:r['دسته‌بندی']||r['دسته']||'واردشده'})).filter(x=>x.title)}else if(ext==='pdf'){if(!window.pdfjsLib)throw Error('کتابخانه PDF بارگذاری نشد.');pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';let pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise,text='';for(let i=1;i<=pdf.numPages;i++){let p=await pdf.getPage(i),c=await p.getTextContent();text+=c.items.map(x=>x.str).join(' ')+'\\n'}let lines=text.split(/\\n|(?=\\d{1,2}[\\/\\-]\\d{1,2})/).map(x=>x.trim()).filter(Boolean);imported=lines.map(line=>({title:line,date:today(),start:'',end:'',category:'PDF'})).filter(x=>x.title.length>3).slice(0,100)}else throw Error('فرمت پشتیبانی نمی‌شود');renderImport();$('importStatus').textContent=`${imported.length} ردیف قابل بررسی پیدا شد.`;$('commitImport').disabled=!imported.length}catch(err){$('importStatus').textContent='خطا: '+err.message}};
+function normalizeDate(v){if(!v)return '';if(typeof v==='number'&&window.XLSX){let d=XLSX.SSF.parse_date_code(v);return `${d.y}-${pad(d.m)}-${pad(d.d)}`}let s=String(v).trim();let m=s.match(/(\\d{4})[\\/\\-](\\d{1,2})[\\/\\-](\\d{1,2})/);return m?`${m[1]}-${pad(m[2])}-${pad(m[3])}`:''}
+function renderImport(){$('previewRows').innerHTML=imported.map((r,i)=>`<label class="row"><input type="checkbox" checked data-import="${i}" style="width:18px">${esc(r.title)} <span class="small">${esc(r.date)}</span></label>`).join('')}
+$('commitImport').onclick=async()=>{let chosen=[...document.querySelectorAll('[data-import]:checked')].map(x=>imported[+x.dataset.import]);for(let r of chosen)await put(STORE,{...r,id:crypto.randomUUID(),done:false,repeat:'none',notes:'ورود از فایل'});await refresh();alert(`${chosen.length} وظیفه اضافه شد.`);$('previewRows').innerHTML='';$('importStatus').textContent='ورود انجام شد.';$('commitImport').disabled=true};
+setInterval(()=>{if(document.visibilityState==='visible'&&'Notification'in window&&Notification.permission==='granted'){let now=new Date(),hm=pad(now.getHours())+':'+pad(now.getMinutes());tasks.filter(t=>!t.done&&t.date===today()&&t.start===hm&&!t.notified).forEach(async t=>{new Notification('زمان انجام وظیفه',{body:t.title});t.notified=true;await put(STORE,t)})}},30000);
+(async()=>{try{await openDB();await refresh();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});}catch(e){alert('حافظه محلی در دسترس نیست. لطفاً در Chrome باز کن.')}})();
+</script></body></html>
