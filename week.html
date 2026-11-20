@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f7f6">
+<title>برنامه هفتگی</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap">
+<style>html,body{margin:0;background:#f5f7f6}</style>
+</head>
+<body>
+<style>
+.pl{--g:#1A7A56;--leaf:#4AA262;--lime:#A7D96C;--deep:#0A3E36;--ink:#0F2B26;--mint:#EEF8F2;--line:#DCE8DF;--txt:#53625C;--gold:#E9C46A;font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;direction:rtl;color:var(--txt);line-height:1.8;max-width:1180px;margin:auto;padding:16px}
+.pl *{box-sizing:border-box}.pl h3{margin:0;color:var(--ink);font-size:18px}
+.pl .top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.pl .nav{display:flex;align-items:center;gap:8px}
+.pl button,.pl select,.pl input{font:inherit}
+.pl .ib{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--g);cursor:pointer;font-size:18px}
+.pl .ib:hover{background:var(--mint)}.pl .rng{font-weight:700;color:var(--ink);min-width:150px;text-align:center}
+.pl .today-b{padding:6px 14px;border-radius:99px;border:1px solid var(--g);background:#fff;color:var(--g);cursor:pointer}
+.pl .add{display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0;padding:12px;background:var(--mint);border-radius:16px}
+.pl .add input,.pl .add select{height:44px;padding:0 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);min-width:0}
+.pl .add input:focus,.pl .add select:focus{outline:0;border-color:var(--g)}
+.pl .add button{height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--g),var(--leaf));color:#fff;font-weight:700;cursor:pointer}
+.pl .week{display:grid;grid-template-columns:1fr;gap:10px}
+.pl .day{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.pl .dh{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--mint);color:var(--ink);font-weight:700;font-size:14px}
+.pl .dh small{color:var(--txt);font-weight:400}.pl .day.now{border-color:var(--leaf);box-shadow:0 0 0 2px rgba(74,162,98,.25)}
+.pl .day.now .dh{background:var(--g);color:#fff}.pl .day.now .dh small{color:#D3EBDD}
+.pl .tl{list-style:none;margin:0;padding:8px;display:flex;flex-direction:column;gap:6px;min-height:56px}
+.pl .t{display:flex;gap:8px;align-items:flex-start;padding:7px 9px;background:#F7FBF8;border:1px solid var(--line);border-radius:10px;font-size:14px;line-height:1.6}
+.pl .t input{accent-color:var(--g);width:18px;height:18px;margin-top:3px;flex:none}
+.pl .t span{flex:1;word-break:break-word}.pl .t.done span{text-decoration:line-through;opacity:.55}.pl .t.done{background:#E6F4EA}
+.pl .t button{border:0;background:none;color:#B04A4A;cursor:pointer;font-size:16px;line-height:1;padding:2px}
+.pl .none{color:#9AAFA6;font-size:13px;text-align:center;padding:6px}
+.pl .chart{margin-top:22px;padding:18px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#fff,var(--mint))}
+.pl .seg{display:inline-flex;padding:3px;background:#fff;border:1px solid var(--line);border-radius:99px}
+.pl .seg button{border:0;background:none;padding:5px 16px;border-radius:99px;color:var(--txt);cursor:pointer}.pl .seg .on{background:var(--g);color:#fff}
+.pl .cg{display:grid;gap:16px;margin-top:14px;align-items:center}
+.pl .ring{position:relative;width:150px;height:150px;margin:auto}.pl .ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:28px;color:var(--g)}
+.pl .ring small{position:absolute;inset:auto 0 30px;text-align:center;font-size:12px}
+.pl .bars{overflow-x:auto}.pl .bars svg{display:block;min-width:100%}
+.pl .sum{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:13px;margin-top:6px}.pl .sum i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px}
+@media(min-width:700px){.pl .add{grid-template-columns:1fr 200px 110px}.pl .cg{grid-template-columns:190px 1fr}}
+@media(min-width:1000px){.pl .week{grid-template-columns:repeat(7,1fr)}.pl .t{flex-direction:column;gap:4px}.pl .t button{align-self:flex-end}}
+</style>
+<section class="pl" id="pl">
+ <div class="top"><h3>برنامه‌های هفته</h3>
+  <div class="nav"><button class="ib" id="pl-n" aria-label="هفته بعد">›</button><div class="rng" id="pl-r"></div><button class="ib" id="pl-p" aria-label="هفته قبل">‹</button><button class="today-b" id="pl-t">امروز</button></div></div>
+ <div class="add"><input id="pl-i" placeholder="برنامه جدید را بنویس…" maxlength="120"><select id="pl-d" aria-label="روز"></select><button id="pl-a">افزودن</button></div>
+ <div class="week" id="pl-w"></div>
+ <div class="chart"><div class="top"><h3>نمودار پیشرفت</h3><div class="seg" id="pl-s"><button data-m="w" class="on">هفته</button><button data-m="m">ماه</button></div></div>
+  <div class="cg"><div class="ring" id="pl-ring"></div><div><div class="bars" id="pl-bars"></div><div class="sum"><span><i style="background:#CFE6D8"></i>کل برنامه‌ها</span><span><i style="background:#1A7A56"></i>انجام‌شده</span></div></div></div></div>
+</section>
+<script>
+(function(){
+var KEY='planner-tasks-v1',MN=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'],WD=['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه'];
+var fa=function(n){return String(n).replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[d]})},$=function(i){return document.getElementById(i)};
+var fm=new Intl.DateTimeFormat('en-u-ca-persian-nu-latn',{year:'numeric',month:'numeric',day:'numeric'});
+function pj(d){var o={};fm.formatToParts(d).forEach(function(p){if(p.type!=='literal'&&p.type!=='era')o[p.type]=+p.value});return o}
+function iso(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function add(d,n){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);return x}
+var tasks=[];try{tasks=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}}
+var now=new Date(),anchor=new Date(now.getFullYear(),now.getMonth(),now.getDate()),mode='w';
+function weekStart(d){return add(d,-((d.getDay()+1)%7))}
+function monthRange(d){var s=add(d,-(pj(d).day-1)),m=pj(s).month,a=[],x=s;while(pj(x).month===m){a.push(x);x=add(x,1)}return a}
+function range(){if(mode==='w'){var s=weekStart(anchor);return [0,1,2,3,4,5,6].map(function(i){return add(s,i)})}return monthRange(anchor)}
+function lbl(d){var p=pj(d);return fa(p.day)+' '+MN[p.month-1]}
+function render(){
+ var wk=range.call?null:null,s=weekStart(anchor),days=[0,1,2,3,4,5,6].map(function(i){return add(s,i)}),td=iso(now);
+ $('pl-r').textContent=lbl(days[0])+' تا '+lbl(days[6]);
+ var h='';days.forEach(function(d,i){var k=iso(d),L=tasks.filter(function(t){return t.d===k});
+  h+='<div class="day'+(k===td?' now':'')+'"><div class="dh">'+WD[i]+'<small>'+lbl(d)+'</small></div><ul class="tl">'+(L.length?L.map(function(t){return '<li class="t'+(t.x?' done':'')+'"><input type="checkbox" data-c="'+t.id+'"'+(t.x?' checked':'')+' aria-label="انجام شد"><span>'+t.t.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})+'</span><button data-x="'+t.id+'" aria-label="حذف">×</button></li>'}).join(''):'<li class="none">—</li>')+'</ul></div>'});
+ $('pl-w').innerHTML=h;
+ var sel=$('pl-d'),cur=sel.value;sel.innerHTML=days.map(function(d,i){return '<option value="'+iso(d)+'">'+WD[i]+' '+lbl(d)+'</option>'}).join('');
+ sel.value=cur&&days.some(function(d){return iso(d)===cur})?cur:(days.some(function(d){return iso(d)===td})?td:iso(days[0]));
+ chart()}
+function chart(){
+ var R=range(),T=0,D=0,rows=R.map(function(d){var L=tasks.filter(function(t){return t.d===iso(d)}),dn=L.filter(function(t){return t.x}).length;T+=L.length;D+=dn;return {d:d,t:L.length,x:dn}});
+ var pc=T?Math.round(D*100/T):0,C=2*Math.PI*58;
+ $('pl-ring').innerHTML='<svg viewBox="0 0 150 150" width="150" height="150"><circle cx="75" cy="75" r="58" fill="none" stroke="#DCE8DF" stroke-width="14"/><circle cx="75" cy="75" r="58" fill="none" stroke="#1A7A56" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+(C*pc/100)+' '+C+'" transform="rotate(-90 75 75)"/></svg><b>'+fa(pc)+'٪</b><small>'+fa(D)+' از '+fa(T)+'</small>';
+ var n=rows.length,bw=mode==='w'?56:26,W=Math.max(n*bw,300),H=190,mx=Math.max.apply(null,rows.map(function(r){return r.t}).concat([1])),s='<svg viewBox="0 0 '+W+' '+H+'" width="'+(mode==='w'?'100%':W)+'" role="img" aria-label="نمودار">';
+ rows.forEach(function(r,i){var x=W-(i+1)*bw+bw*.2,w=bw*.6,ht=(H-50)*r.t/mx,hd=(H-50)*r.x/mx,lab=mode==='w'?WD[i].slice(0,mode==='w'?9:2):fa(pj(r.d).day);
+  s+='<rect x="'+x+'" y="'+(H-30-ht)+'" width="'+w+'" height="'+Math.max(ht,r.t?0:2)+'" rx="5" fill="#CFE6D8"/>'+(r.x?'<rect x="'+x+'" y="'+(H-30-hd)+'" width="'+w+'" height="'+hd+'" rx="5" fill="#1A7A56"/>':'')+(r.t?'<text x="'+(x+w/2)+'" y="'+(H-34-ht)+'" font-size="11" text-anchor="middle" fill="#0F2B26">'+fa(r.x)+'/'+fa(r.t)+'</text>':'')+'<text x="'+(x+w/2)+'" y="'+(H-10)+'" font-size="'+(mode==='w'?12:10)+'" text-anchor="middle" fill="#53625C">'+lab+'</text>'});
+ $('pl-bars').innerHTML=s+'</svg>'}
+$('pl-a').onclick=function(){var v=$('pl-i').value.trim();if(!v)return $('pl-i').focus();tasks.push({id:Date.now()+''+Math.floor(Math.random()*99),t:v,d:$('pl-d').value,x:0});$('pl-i').value='';save();render()};
+$('pl-i').onkeydown=function(e){if(e.key==='Enter')$('pl-a').click()};
+$('pl-w').onclick=function(e){var x=e.target.dataset.x,c=e.target.dataset.c;if(x){tasks=tasks.filter(function(t){return t.id!==x});save();render()}else if(c){tasks.forEach(function(t){if(t.id===c)t.x=e.target.checked?1:0});save();render()}};
+$('pl-n').onclick=function(){anchor=add(anchor,7);render()};$('pl-p').onclick=function(){anchor=add(anchor,-7);render()};
+$('pl-t').onclick=function(){anchor=new Date(now.getFullYear(),now.getMonth(),now.getDate());render()};
+$('pl-s').onclick=function(e){var m=e.target.dataset.m;if(!m)return;mode=m;this.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b===e.target)});chart()};
+render()})();
+</script>
+
+</body>
+</html>
