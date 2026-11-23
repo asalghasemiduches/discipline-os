@@ -1,9 +1,13 @@
+
 (async () => {
   const DB_NAME = "discipline-os-v03";
   const WEEKS = 12;
+  const START_DATE = "2026-11-24";
+  const ANCHOR_SATURDAY = "2026-11-21";
 
-  // [روز هفته، ساعت شروع، ساعت پایان، عنوان، دسته، محافظت از جریمه]
   // روزها: 0=شنبه، 1=یکشنبه، ...، 6=جمعه
+  // [روز، شروع، پایان، عنوان، دسته، معاف از جریمه]
+
   const schedule = [
     // شنبه
     [0,"00:00","08:00","خواب شبانه","other",true],
@@ -69,7 +73,9 @@
     [3,"17:00","20:00","باشگاه و شام","other",true],
     [3,"20:00","22:00","ادمینی نوبت سوم","work"],
     [3,"22:00","23:00","دوره دیجیتال مارکتینگ ـ جلسه دوم","learning"],
-    [3,"23:00","23:30","آماده‌شدن برای خواب","other",true],    // چهارشنبه
+    [3,"23:00","23:30","آماده‌شدن برای خواب","other",true],
+
+    // چهارشنبه
     [4,"00:00","08:00","خواب شبانه","other",true],
     [4,"08:00","08:30","بیداری و صبحانه","other",true],
     [4,"08:30","10:30","آموزش و تمرین سئو","learning"],
@@ -122,64 +128,35 @@
     [6,"23:40","24:00","آماده‌شدن برای خواب","other",true]
   ];
 
+  // اتصال به دیتابیس فعلی پلنر
   const openRequest = indexedDB.open(DB_NAME, 1);
+
   const db = await new Promise((resolve, reject) => {
     openRequest.onsuccess = () => resolve(openRequest.result);
     openRequest.onerror = () => reject(openRequest.error);
   });
 
-  if (!db.objectStoreNames.contains("tasks")) {
-    throw new Error("فروشگاه وظایف در دیتابیس پیدا نشد؛ هیچ داده‌ای ثبت نشد.");
+  if (
+    !db.objectStoreNames.contains("tasks") ||
+    !db.objectStoreNames.contains("settings")
+  ) {
+    db.close();
+    throw new Error(
+      "فروشگاه tasks یا settings در دیتابیس پیدا نشد."
+    );
   }
 
-  // تاریخ شروع در تنظیمات ذخیره می‌شود تا با هر بار بازشدن سایت جابه‌جا نشود.
-  const savedScheduleMeta = await new Promise((resolve, reject) => {
-    const req = db.transaction("settings", "readonly")
-      .objectStore("settings").get("weeklyScheduleMeta");
-    req.onsuccess = () => resolve(req.result || null);
-    req.onerror = () => reject(req.error);
-  });
-
-  let firstSaturday;
-
-  if (savedScheduleMeta && savedScheduleMeta.startDate) {
-    firstSaturday = new Date(savedScheduleMeta.startDate + "T12:00:00");
-  } else {
-    const today = new Date();
-    today.setHours(12, 0, 0, 0);
-
-    const daysUntilSaturday = ((6 - today.getDay() + 7) % 7) || 7;
-
-    firstSaturday = new Date(today);
-    firstSaturday.setDate(today.getDate() + daysUntilSaturday);
-
-    const startDate = [
-      firstSaturday.getFullYear(),
-      String(firstSaturday.getMonth() + 1).padStart(2, "0"),
-      String(firstSaturday.getDate()).padStart(2, "0")
-    ].join("-");
-
-    await new Promise((resolve, reject) => {
-      const tx = db.transaction("settings", "readwrite");
-
-      tx.objectStore("settings").put({
-        id: "weeklyScheduleMeta",
-        startDate,
-        weeks: WEEKS,
-        version: 1
-      });
-
-      tx.oncomplete = resolve;
-      tx.onerror = () => reject(tx.error);
-      tx.onabort = () => reject(
-        tx.error || new Error("ذخیره تاریخ شروع برنامه ناموفق بود.")
-      );
-    });
-  }
+  // تاریخ شروع ثابت برنامه
+  const firstSaturday = new Date(
+    ANCHOR_SATURDAY + "T12:00:00"
+  );
 
   const dateFor = (week, weekday) => {
     const d = new Date(firstSaturday);
-    d.setDate(firstSaturday.getDate() + week * 7 + weekday);
+
+    d.setDate(
+      firstSaturday.getDate() + week * 7 + weekday
+    );
 
     return [
       d.getFullYear(),
@@ -188,6 +165,7 @@
     ].join("-");
   };
 
+  // خواندن اطلاعات قبلی
   const existing = await new Promise((resolve, reject) => {
     const req = db.transaction("tasks", "readonly")
       .objectStore("tasks").getAll();
@@ -196,15 +174,89 @@
     req.onerror = () => reject(req.error);
   });
 
+  // فقط وظایف خودکار نسخه قبلی حذف می‌شوند.
+  const savedMeta = await new Promise((resolve, reject) => {
+    const req = db.transaction("settings", "readonly")
+      .objectStore("settings").get("weeklyScheduleMeta");
+
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+
+  const needsMigration = !savedMeta || savedMeta.version < 2;
+
+  if (needsMigration) {
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction("tasks", "readwrite");
+      const store = tx.objectStore("tasks");
+
+      for (const task of existing) {
+        if (
+          typeof task.scheduleKey === "string" &&
+          task.scheduleKey.startsWith("weekly-v1-")
+        ) {
+          store.delete(task.id);
+        }
+      }
+
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(
+        tx.error || new Error("اصلاح وظایف قبلی ناموفق بود.")
+      );
+    });
+
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction("settings", "readwrite");
+
+      tx.objectStore("settings").put({
+        id: "weeklyScheduleMeta",
+        startDate: ANCHOR_SATURDAY,
+        weeks: WEEKS,
+        version: 2
+      });
+
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error);
+    });
+  }
+
+  // خواندن دوباره وظایف پس از اصلاح
+  const updatedTasks = await new Promise((resolve, reject) => {
+    const req = db.transaction("tasks", "readonly")
+      .objectStore("tasks").getAll();
+
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+
   const existingKeys = new Set(
-    existing.map(t => t.scheduleKey).filter(Boolean)
+    updatedTasks.map(t => t.scheduleKey).filter(Boolean)
   );
 
-  const newTasks = [];  for (let week = 0; week < WEEKS; week++) {
-    for (const [day, start, end, title, category, noPenalty] of schedule) {
-      const date = dateFor(week, day);
-      const scheduleKey = `weekly-v1-${week}-${day}-${start}-${title}`;
+  const newTasks = [];
 
+  // ساخت وظایف ۱۲ هفته‌ای از سه‌شنبه ۳ آذر
+  for (let week = 0; week < WEEKS; week++) {
+    for (const [
+      day,
+      start,
+      end,
+      title,
+      category,
+      noPenalty
+    ] of schedule) {
+
+      const date = dateFor(week, day);
+
+      // هیچ وظیفه‌ای قبل از سه‌شنبه ۳ آذر ساخته نشود.
+      if (date < START_DATE) continue;
+
+      const scheduleKey =
+        `weekly-v1-${week}-${day}-${start}-${title}`;
+
+      // جلوگیری از ساخت وظایف تکراری
       if (existingKeys.has(scheduleKey)) continue;
 
       newTasks.push({
@@ -231,12 +283,22 @@
     }
   }
 
+  // اگر همه وظایف قبلاً ثبت شده باشند
   if (!newTasks.length) {
-    console.log("برنامه ۱۲ هفته‌ای قبلاً ثبت شده است؛ مورد تکراری اضافه نشد.");
     db.close();
+
+    console.log(
+      "برنامه ۱۲ هفته‌ای قبلاً ثبت شده است؛ وظیفه تکراری ساخته نشد."
+    );
+
+    alert(
+      "برنامه قبلاً ثبت شده است و نیازی به ثبت مجدد نیست."
+    );
+
     return;
   }
 
+  // ثبت وظایف جدید
   await new Promise((resolve, reject) => {
     const tx = db.transaction("tasks", "readwrite");
     const store = tx.objectStore("tasks");
@@ -246,28 +308,56 @@
     }
 
     tx.oncomplete = resolve;
+
     tx.onerror = () => reject(tx.error);
+
     tx.onabort = () => reject(
       tx.error || new Error("ثبت برنامه لغو شد.")
     );
   });
 
-  const startDate = dateFor(0, 0);
+  // تاریخ شروع برنامه در تنظیمات ثبت می‌شود.
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction("settings", "readwrite");
+
+    tx.objectStore("settings").put({
+      id: "weeklyScheduleMeta",
+      startDate: ANCHOR_SATURDAY,
+      weeks: WEEKS,
+      version: 2
+    });
+
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+
   db.close();
 
-  // وظایف تازه را همان لحظه در داشبورد و برنامه‌ریز نمایش بده.
+  // تازه‌سازی داشبورد
   if (typeof window.refresh === "function") {
     await window.refresh();
   }
 
-  console.log(`ثبت برنامه کامل شد: ${newTasks.length} وظیفه جدید برای ۱۲ هفته.`);
-  console.log("تاریخ شروع:", startDate);
+  console.log(
+    `برنامه با موفقیت ثبت شد: ${newTasks.length} وظیفه جدید`
+  );
+
+  console.log(
+    "تاریخ شروع برنامه: سه‌شنبه ۳ آذر ۱۴۰۵"
+  );
 
   alert(
-    `برنامه با موفقیت ثبت شد.\n${newTasks.length} وظیفه جدید برای ۱۲ هفته اضافه شد.\nاطلاعات قبلی دست‌نخورده باقی ماند.`
+    `برنامه با موفقیت ثبت شد.\n` +
+    `${newTasks.length} وظیفه جدید اضافه شد.\n` +
+    `شروع برنامه: سه‌شنبه ۳ آذر ۱۴۰۵`
   );
 
 })().catch(error => {
   console.error("خطا در ثبت برنامه هفتگی:", error);
-  alert("ثبت برنامه هفتگی انجام نشد. لطفاً Console مرورگر را بررسی کن.");
+
+  alert(
+    "ثبت برنامه انجام نشد.\n" +
+    "لطفاً خطای Console مرورگر را بررسی کن."
+  );
 });
