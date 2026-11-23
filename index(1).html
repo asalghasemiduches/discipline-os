@@ -288,5 +288,5 @@ applyTheme(document.documentElement.getAttribute('data-theme')||'light');$('dash
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>{const p=$(b.dataset.page);p.classList.remove('enter');void p.offsetWidth;p.classList.add('enter');setTimeout(()=>p.classList.remove('enter'),900);b.scrollIntoView({inline:'center',block:'nearest',behavior:reduceMotion()?'auto':'smooth'});scrollTo(0,0)}));
 (async()=>{try{db=await openDB();await refresh();updateTimer();storageInfo()}catch(e){console.error(e);alert('مرورگر امکان ذخیره‌سازی محلی را فراهم نکرد. لطفاً از Chrome استفاده کن.')}})();
 </script>
-<script src="./schedule.js"></script>
+<script src="./schedule.js"></script> 
 </body></html>
