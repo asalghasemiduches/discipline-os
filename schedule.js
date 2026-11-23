@@ -1,5 +1,5 @@
 (async () => {
-  const DB_NAME = "discipline-os-v03";
+  const DB_NAME = "discipline-os-v04";
   const WEEKS = 12;
 
   // [روز هفته، ساعت شروع، ساعت پایان، عنوان، دسته، محافظت از جریمه]
